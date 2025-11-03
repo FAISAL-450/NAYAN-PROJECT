@@ -109,7 +109,7 @@
 
 {% if request.user.is_authenticated %}
   {% with request.user.email|default_if_none:"" as email %}
-    {% with request.user.customerdetailed_profile as profile %}
+    {% with request.user.customerdetailed_profile|default_if_none:"" as profile %}
       <div class="sidebar">
         <div class="sidebar-header">ERP SOLUTION</div>
         <ul class="sidebar-menu">
@@ -136,6 +136,7 @@
 
           {% if email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
             <!-- 🛡️ Admin: Full Access -->
+
             <!-- Construction -->
             <li class="dropdown">
               <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
