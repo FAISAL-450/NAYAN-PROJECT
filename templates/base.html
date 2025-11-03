@@ -108,79 +108,80 @@
 <body>
 
 {% if request.user.is_authenticated %}
-  <div class="sidebar">
-    <div class="sidebar-header">ERP SOLUTION</div>
-    <ul class="sidebar-menu">
-      {% with request.user.email as email %}
+  {% with request.user.email|default_if_none:"" as email %}
+    {% with request.user.customerdetailed_profile as profile %}
+      <div class="sidebar">
+        <div class="sidebar-header">ERP SOLUTION</div>
+        <ul class="sidebar-menu">
 
-        <!-- 🏠 Always show Home -->
-        <li class="nav-item">
-          <a href="{% url 'home' %}">
-            <span><i class="fas fa-home"></i> Home</span>
-          </a>
-        </li>
-
-        {% if email == 'akash@dzignscapeprofessionals.onmicrosoft.com' or email == 'bappi@dzignscapeprofessionals.onmicrosoft.com' %}
-          <!-- 👷 Akash & Bappi: Sales & Marketing -->
-          <li class="dropdown">
-            <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
-              <span><i class="fas fa-hard-hat"></i> Sales & Marketing</span>
-              <i class="fa fa-chevron-down toggle-icon"></i>
+          <!-- 🏠 Always show Home -->
+          <li class="nav-item">
+            <a href="{% url 'home' %}">
+              <span><i class="fas fa-home"></i> Home</span>
             </a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url 'customerdetailed_dashboard' %}?department=salesmarketing">Customer Detailed</a></li>
-            </ul>
-          </li>
-        {% endif %}
-
-        {% if email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
-          <!-- 🛡️ Admin: Full Access -->
-
-          <!-- Construction -->
-          <li class="dropdown">
-            <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
-              <span><i class="fas fa-hard-hat"></i> Construction</span>
-              <i class="fa fa-chevron-down toggle-icon"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
-            </ul>
           </li>
 
-          <!-- Sales & Marketing -->
-          <li class="dropdown">
-            <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
-              <span><i class="fas fa-hard-hat"></i> Sales & Marketing</span>
-              <i class="fa fa-chevron-down toggle-icon"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <li><a href="{% url 'customerdetailed_dashboard' %}?department=salesmarketing">Customer Detailed</a></li>
-            </ul>
-          </li>
+          {% if email == 'akash@dzignscapeprofessionals.onmicrosoft.com' or email == 'bappi@dzignscapeprofessionals.onmicrosoft.com' %}
+            <!-- 👷 Akash & Bappi: Sales & Marketing -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
+                <span><i class="fas fa-hard-hat"></i> Sales & Marketing</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'customerdetailed_dashboard' %}?department=salesmarketing">Customer Detailed</a></li>
+              </ul>
+            </li>
+          {% endif %}
 
-          <!-- Finance -->
-          <li class="dropdown">
-            <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
-              <span><i class="fas fa-coins"></i> Finance</span>
-              <i class="fa fa-chevron-down toggle-icon"></i>
-            </a>
-            <ul class="dropdown-menu">
-              <li class="dropdown">
-                <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
-                  <span><i class="fas fa-book"></i> General Ledger</span>
-                  <i class="fa fa-chevron-down toggle-icon"></i>
-                </a>
-                <ul class="dropdown-menu">
-                  <li><a href="{% url 'account_dashboard' %}">Chart of Accounts</a></li>
-                </ul>
-              </li>
-            </ul>
-          </li>
-        {% endif %}
+          {% if email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
+            <!-- 🛡️ Admin: Full Access -->
+            <!-- Construction -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
+                <span><i class="fas fa-hard-hat"></i> Construction</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'project_dashboard' %}?department=construction">Project Detailed</a></li>
+              </ul>
+            </li>
 
-      {% endwith %}
-    </ul>
-  </div>
+            <!-- Sales & Marketing -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
+                <span><i class="fas fa-hard-hat"></i> Sales & Marketing</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="{% url 'customerdetailed_dashboard' %}?department=salesmarketing">Customer Detailed</a></li>
+              </ul>
+            </li>
+
+            <!-- Finance -->
+            <li class="dropdown">
+              <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
+                <span><i class="fas fa-coins"></i> Finance</span>
+                <i class="fa fa-chevron-down toggle-icon"></i>
+              </a>
+              <ul class="dropdown-menu">
+                <li class="dropdown">
+                  <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
+                    <span><i class="fas fa-book"></i> General Ledger</span>
+                    <i class="fa fa-chevron-down toggle-icon"></i>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li><a href="{% url 'account_dashboard' %}">Chart of Accounts</a></li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+          {% endif %}
+
+        </ul>
+      </div>
+    {% endwith %}
+  {% endwith %}
 {% endif %}
 
 

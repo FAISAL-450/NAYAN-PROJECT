@@ -43,6 +43,9 @@ class EnsureProfileAndDepartmentMiddleware:
                 # Ensure profile exists
                 profile, _ = Profile.objects.get_or_create(user=user)
 
+                # Attach profile to user for template access
+                setattr(request.user, "customerdetailed_profile", profile)
+
                 # Assign department from settings
                 department_map = getattr(settings, "DEPARTMENT_EMAIL_MAP", {})
                 mapped_department = department_map.get(email)
@@ -63,4 +66,5 @@ class EnsureProfileAndDepartmentMiddleware:
             logger.error(f"❌ Middleware execution error: {e}")
 
         return self.get_response(request)
+
 
