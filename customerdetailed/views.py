@@ -6,9 +6,12 @@ from django.db.models import Q
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.exceptions import PermissionDenied
+import logging
 
 from .models import CustomerDetailed
 from .forms import CustomerDetailedForm
+
+logger = logging.getLogger(__name__)
 
 # B - Azure Admin Check
 def is_azure_admin(user):
@@ -63,7 +66,16 @@ def customerdetailed_dashboard(request):
     if not is_azure_admin(request.user) and request.method == "POST" and form.is_valid():
         customer = form.save(commit=False)
         customer.created_by = request.user
-        customer.team = getattr(request.user.customerdetailed_profile, "role", None)
+
+        # ✅ Safe access to profile role
+        profile = getattr(request.user, "customerdetailed_profile", None)
+        customer.team = getattr(profile, "role", None)
+
+        if profile:
+            logger.info(f"✅ Profile found for {request.user.email} with role: {profile.role}")
+        else:
+            logger.warning(f"⚠️ No profile found for {request.user.email} — team will be None")
+
         customer.save()
         messages.success(request, "✅ Customer detailed record created successfully.")
         return redirect(f"{reverse('customerdetailed_dashboard')}?q={query}")
@@ -139,3 +151,5 @@ def delete_customer(request, pk):
         "customer": customer,
         "query": query
     })
+
+

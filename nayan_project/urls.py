@@ -24,7 +24,7 @@ path('finance/', include('finance.urls')),
 path('project/', include('project.urls')),               
 path('account/', include('account.urls')),       
 path('salesmarketing /', include('salesmarketing.urls')),       
-path('customerdetailed /', include('customerdetailed.urls')),     
+path('customerdetailed/', include('customerdetailed.urls')),  # ✅ This line is critical    
 path('accounts/', include('accounts.urls')),  
 
 ]
