@@ -42,3 +42,4 @@ class CustomerDetailedForm(forms.ModelForm):
                 'placeholder': 'Enter company name'
             }),
         }
+
