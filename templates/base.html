@@ -120,7 +120,7 @@
           </a>
         </li>
 
-   {% if email == 'akash@dzignscapeprofessionals.onmicrosoft.com' or email == 'bappi@dzignscapeprofessionals.onmicrosoft.com' %}
+        {% if email == 'akash@dzignscapeprofessionals.onmicrosoft.com' or email == 'bappi@dzignscapeprofessionals.onmicrosoft.com' %}
           <!-- 👷 Akash & Bappi: Sales & Marketing -->
           <li class="dropdown">
             <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
@@ -135,6 +135,7 @@
 
         {% if email == 'admin@dzignscapeprofessionals.onmicrosoft.com' %}
           <!-- 🛡️ Admin: Full Access -->
+
           <!-- Construction -->
           <li class="dropdown">
             <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
@@ -146,7 +147,7 @@
             </ul>
           </li>
 
-         <!-- Sales & Marketing -->
+          <!-- Sales & Marketing -->
           <li class="dropdown">
             <a class="dropdown-toggle" href="#" role="button" aria-expanded="false">
               <span><i class="fas fa-hard-hat"></i> Sales & Marketing</span>
@@ -181,6 +182,7 @@
     </ul>
   </div>
 {% endif %}
+
 
   <div class="main-content">
     {% block content %}{% endblock %}
