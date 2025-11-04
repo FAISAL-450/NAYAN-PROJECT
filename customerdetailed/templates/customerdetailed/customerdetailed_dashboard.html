@@ -1,12 +1,12 @@
 {% extends 'base.html' %}
 {% load static %}
-{% block title %}Customer Dashboard{% endblock %}
+{% block title %}Customer Detailed Dishoard{% endblock %}
 {% block content %}
 
-<!-- 📦 Main Dashboard Container -->
+<!-- 📦 Main Dishoard Container -->
 <div class="dashboard-wrapper">
 
-  <!-- 🔔 Flash Messages Section -->
+  <!-- 🔔 Flash Messages -->
   {% if messages %}
     {% for message in messages %}
       <div class="alert-box">
@@ -16,7 +16,7 @@
     {% endfor %}
   {% endif %}
 
-  <!-- 📝 Grid-Based Customer Form Section -->
+  <!-- 📝 Customer Form Section -->
   {% if not readonly %}
   <section class="form-section">
     <header class="form" onclick="toggleForm()">
@@ -28,7 +28,6 @@
         {% csrf_token %}
         {{ form.non_field_errors }}
 
-        <!-- Grid Layout -->
         <div class="form-grid">
           <div class="form-cell">{{ form.name.label_tag }}{{ form.name }}</div>
           <div class="form-cell">{{ form.address.label_tag }}{{ form.address }}</div>
@@ -37,7 +36,6 @@
           <div class="form-cell">{{ form.company.label_tag }}{{ form.company }}</div>
         </div>
 
-        <!-- Form Actions -->
         <div class="form-actions">
           <button type="submit" class="btn green">
             {% if mode == 'edit' %}Update{% else %}Save{% endif %}
@@ -51,7 +49,7 @@
   </section>
   {% endif %}
 
-  <!-- 🔍 Filter/Search Section -->
+  <!-- 🔍 Search Section -->
   <section class="filter-section">
     <h2>🔍 FILTERING</h2>
     <form method="get">
@@ -69,60 +67,58 @@
     <table>
       <thead>
         <tr>
-          <th>Sl No</th>
+          <th>#</th>
           <th>Name</th>
           <th>Address</th>
           <th>Email</th>
           <th>Phone</th>
           <th>Company</th>
-          <th>Actions Button</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
         {% for customer in customerdetaileds %}
-        <tr>
-          <td>{{ forloop.counter }}</td>
-          <td>{{ customer.name }}</td>
-          <td>{{ customer.address }}</td>
-          <td>{{ customer.email }}</td>
-          <td>{{ customer.phone }}</td>
-          <td>{{ customer.company }}</td>
-          <td>
-            {% if not readonly and customer.created_by == request.user %}
-              <a href="{% url 'edit_customer' customer.pk %}?q={{ query }}" class="btn yellow action-btn">
-                <i class="fas fa-edit"></i> Edit
-              </a>
-              <form method="post" action="{% url 'delete_customer' customer.pk %}?q={{ query }}" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit" class="btn red action-btn" onclick="return confirm('Delete this customer?');">
-                  <i class="fas fa-trash-alt"></i> Delete
-                </button>
-              </form>
-            {% else %}
-              <span class="text-muted">View Only</span>
-            {% endif %}
-          </td>
-        </tr>
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ customer.name }}</td>
+            <td>{{ customer.address }}</td>
+            <td>{{ customer.email }}</td>
+            <td>{{ customer.phone }}</td>
+            <td>{{ customer.company }}</td>
+            <td>
+              {% if not readonly and customer.created_by == request.user %}
+                <a href="{% url 'edit_customer' customer.pk %}?q={{ query }}" class="btn yellow action-btn">
+                  <i class="fas fa-edit"></i> Edit
+                </a>
+                <form method="post" action="{% url 'delete_customer' customer.pk %}?q={{ query }}" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn red action-btn" onclick="return confirm('Delete this customer?');">
+                    <i class="fas fa-trash-alt"></i> Delete
+                  </button>
+                </form>
+              {% endif %}
+            </td>
+          </tr>
         {% empty %}
-        <tr><td colspan="7" class="no-data">No customer records found.</td></tr>
+          <tr><td colspan="7" class="no-data">No customer records found.</td></tr>
         {% endfor %}
       </tbody>
     </table>
   </section>
 
-  <!-- 📋 Paginator Section -->
+  <!-- 📋 Pagination Section -->
   {% if customerdetaileds.paginator.num_pages > 1 %}
-    <footer class="pagination-footer">
-      <nav class="pagination">
-        {% if customerdetaileds.has_previous %}
-          <a href="?q={{ query }}&page={{ customerdetaileds.previous_page_number }}" class="page-link">Previous</a>
-        {% endif %}
-        <span class="page-info">Page {{ customerdetaileds.number }} of {{ customerdetaileds.paginator.num_pages }}</span>
-        {% if customerdetaileds.has_next %}
-          <a href="?q={{ query }}&page={{ customerdetaileds.next_page_number }}" class="page-link">Next</a>
-        {% endif %}
-      </nav>
-    </footer>
+  <footer class="pagination-footer">
+    <nav class="pagination">
+      {% if customerdetaileds.has_previous %}
+        <a href="?q={{ query }}&page={{ customerdetaileds.previous_page_number }}" class="page-link">Previous</a>
+      {% endif %}
+      <span class="page-info">Page {{ customerdetaileds.number }} of {{ customerdetaileds.paginator.num_pages }}</span>
+      {% if customerdetaileds.has_next %}
+        <a href="?q={{ query }}&page={{ customerdetaileds.next_page_number }}" class="page-link">Next</a>
+      {% endif %}
+    </nav>
+  </footer>
   {% endif %}
 </div>
 
@@ -134,23 +130,17 @@
 
     if (form.style.display === 'none') {
       form.style.display = 'block';
-      icon.classList.remove('fa-chevron-down');
-      icon.classList.add('fa-chevron-up');
+      icon.classList.replace('fa-chevron-down', 'fa-chevron-up');
     } else {
       form.style.display = 'none';
-      icon.classList.remove('fa-chevron-up');
-      icon.classList.add('fa-chevron-down');
+      icon.classList.replace('fa-chevron-up', 'fa-chevron-down');
     }
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    const mode = "{{ mode }}";
-    if (mode === "edit") {
-      const form = document.getElementById('formContent');
-      const icon = document.getElementById('toggle-icon').querySelector('i');
-      form.style.display = 'block';
-      icon.classList.remove('fa-chevron-down');
-      icon.classList.add('fa-chevron-up');
+    if ("{{ mode }}" === "edit") {
+      document.getElementById('formContent').style.display = 'block';
+      document.getElementById('toggle-icon').querySelector('i').classList.replace('fa-chevron-down', 'fa-chevron-up');
     }
   });
 </script>
@@ -576,3 +566,4 @@ td {
 </style>
 
 {% endblock %}
+

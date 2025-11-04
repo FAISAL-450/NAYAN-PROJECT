@@ -3,7 +3,7 @@ import base64
 import json
 from django.conf import settings
 from django.contrib.auth.models import User
-from customerdetailed.models import Profile
+from .models import Profile
 
 logger = logging.getLogger(__name__)
 
